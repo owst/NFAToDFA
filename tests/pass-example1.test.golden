@@ -1,0 +1,12 @@
+digraph NFA {
+rankdir = LR;
+node [shape = point]; init
+0 [label="0" shape="circle" ]; init -> 0;
+0 -> 0 [label="{1, 0}"];
+1 [label="1" shape="circle" ];
+0 -> 1 [label="1"];
+2 [label="2" shape="circle" ];
+1 -> 2 [label="{1, 0}"];
+3 [label="3" shape="doublecircle" ];
+2 -> 3 [label="{1, 0}"];
+}

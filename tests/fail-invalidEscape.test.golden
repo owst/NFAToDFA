@@ -1,0 +1,3 @@
+NFAToDFA: (line 2, column 5):
+unexpected "!"
+expecting valid escape char: '\', or '-' or '>'

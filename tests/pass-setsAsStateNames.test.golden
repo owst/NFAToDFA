@@ -1,0 +1,6 @@
+digraph NFA {
+rankdir = LR;
+node [shape = point]; init
+0 [label="{0}" shape="doublecircle" ]; init -> 0;
+0 -> 0 [label="a"];
+}
