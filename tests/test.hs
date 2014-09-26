@@ -9,7 +9,7 @@ import System.Directory ( getDirectoryContents, doesFileExist, removeFile )
 import System.Process ( readProcessWithExitCode )
 
 main = do
-    let isTest f = isSuffixOf ".test" f
+    let isTest = isSuffixOf ".test"
     testFiles <- filter isTest <$> getDirectoryContents testDir
     tests <- mapM toTest testFiles
     defaultMain $ testGroup "golden-tests" tests

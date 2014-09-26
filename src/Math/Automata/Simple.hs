@@ -204,23 +204,21 @@ subsetConstruction (FA trans inits finals) = FA trans' inits' finals'
     getTransTargets :: NEHM.NonEmpty l (NES.NonEmpty s) -> [NES.NonEmpty s]
     getTransTargets = map snd . NEHM.toList
 
-    go s = do
-        let transitions = liftTrans s
-        case transitions of
-            Nothing -> return ()
-            Just trans -> do
-                let newTransTargets = getTransTargets trans
-                (transSoFar, done) <- get
-                -- Which new states haven't we seen before?
-                let todoStates = filter (not . (`NES.member` done)) newTransTargets
-                    -- Each Set of NFA states is now a single set of the DFA,
-                    -- furthermore, each label now maps to a single such state, as
-                    -- indicated by Identity as the functor parameter of FA
-                    singleTargets = fmap Identity trans
-                    transSoFar' = HM.insert s singleTargets transSoFar
-                    done' = foldr NES.insert done todoStates
-                put (transSoFar', done')
-                for_ todoStates go
+    go s = case liftTrans s of
+        Nothing -> return ()
+        Just sTrans -> do
+            let newTransTargets = getTransTargets sTrans
+            (transSoFar, done) <- get
+            -- Which new states haven't we seen before?
+            let todoStates = filter (not . (`NES.member` done)) newTransTargets
+                -- Each Set of NFA states is now a single set of the DFA,
+                -- furthermore, each label now maps to a single such state, as
+                -- indicated by Identity as the functor parameter of FA
+                singleTargets = fmap Identity sTrans
+                transSoFar' = HM.insert s singleTargets transSoFar
+                done' = foldr NES.insert done todoStates
+            put (transSoFar', done')
+            for_ todoStates go
 
 -- |Parse a NFA from an input Text.
 textToNFA :: Text -> Either String (NFA Text Text)

@@ -31,7 +31,7 @@ go wantSubsetConstruction = do
                     if wantSubsetConstruction
                         then faToDot . flattenDFAStates $
                                  subsetConstruction nfa
-                        else faToDot $ nfa
+                        else faToDot nfa
             T.putStr dotText
 
 main :: IO ()
