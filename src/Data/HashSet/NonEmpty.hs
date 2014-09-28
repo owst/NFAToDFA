@@ -87,13 +87,16 @@ union (NES e1 s1) (NES e2 s2) = NES e1 s
 member :: a -> NonEmpty a -> Bool
 member e (NES a hs) = e == a || HS.member e hs
 
--- |Convert a NES into a list of its elements.
+-- |Convert a NES into a canonical list of elements, "forgetting" the
+-- chosen element by first converting to a HashSet and then to a list.
 toList :: NonEmpty a -> [a]
-toList (NES a hs) = a : HS.toList hs
+toList = HS.toList . toHashSet
 
--- |Convert a NES into a NonEmpty (list) of its elements.
+-- |Convert a NES into a canonical NonEmpty (list) of its elements.
 toNonEmptyList :: NonEmpty a -> NEL.NonEmpty a
-toNonEmptyList (NES a hs) = a NEL.:| HS.toList hs
+toNonEmptyList nes = case toList nes of
+                         [] -> error "impossible!"
+                         a : as -> a NEL.:| as
 
 -- |Convert a NES into a HashSet.
 toHashSet :: NonEmpty a -> HashSet a

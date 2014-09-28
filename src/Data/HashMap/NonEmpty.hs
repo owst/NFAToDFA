@@ -120,13 +120,17 @@ lookup :: k -> NonEmpty k v -> Maybe v
 lookup needle (NEHM (k, v) hm)
     | needle == k = Just v
     | otherwise = HM.lookup needle hm
--- |Convert a NEHM into a list of key/value pairs.
-toList :: NonEmpty k v -> [(k, v)]
-toList (NEHM kv hm) = kv : HM.toList hm
 
--- |Convert a NES into a NonEmpty (list) of its elements.
+-- |Convert a NEHM into a canonical list of key/value pairs, forgetting the
+-- chosen key/value by first converting to a HashMap, and then to a list.
+toList :: NonEmpty k v -> [(k, v)]
+toList = HM.toList . toHashMap
+
+-- |Convert a NES into a canonical NonEmpty (list) of its elements.
 toNonEmptyList :: NonEmpty k v -> NEL.NonEmpty (k, v)
-toNonEmptyList (NEHM (k, v) hm) = (k, v) NEL.:| HM.toList hm
+toNonEmptyList nes = case toList nes of
+                         [] -> error "impossible"
+                         kv : kvs -> kv NEL.:| kvs
 
 -- |Convert a NEHM into a HashMap
 toHashMap :: NonEmpty k v -> HashMap k v
