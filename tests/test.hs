@@ -3,7 +3,7 @@ import Test.Tasty.Golden as G
 
 import Control.Applicative ( (<$>) )
 import Control.Monad ( when )
-import Data.List ( isSuffixOf )
+import Data.List ( isSuffixOf, isPrefixOf )
 import System.FilePath ( (</>), (<.>) )
 import System.Directory ( getDirectoryContents, doesFileExist, removeFile )
 import System.Process ( readProcessWithExitCode )
@@ -18,7 +18,10 @@ prog :: String -> String -> IO ()
 prog inFile outFile = do
     let runner = "dist/build/NFAToDFA/NFAToDFA"
     input <- readFile inFile
-    (_, stdout, stderr) <- readProcessWithExitCode runner [] input
+    let shouldDoSubsetConstruction =
+            isPrefixOf "-subset-" . dropWhile (/= '-') $ inFile
+        args = ["-s" | shouldDoSubsetConstruction]
+    (_, stdout, stderr) <- readProcessWithExitCode runner args input
     writeFile outFile $ stdout ++ stderr
 
 toTest f = do
