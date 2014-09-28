@@ -88,7 +88,7 @@ unionWith :: (v -> v -> v) -> NonEmpty k v -> NonEmpty k v -> NonEmpty k v
 unionWith f (NEHM (k1, v1) hm1) (NEHM (k2, v2) hm2) =
     NEHM (k1, v) hm
   where
-    hmBoth = hm1 `HM.union` hm2
+    hmBoth = HM.unionWith f hm1 hm2
 
     -- Only insert k1 into the hashset if it won't otherwise be in the NEHM.
     (v, hm) = if k1 == k2
