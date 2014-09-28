@@ -53,6 +53,7 @@ data FA f s l where
         -> FA f s l
 
 type NFA s l = FA NES.NonEmpty s l
+-- TODO: enforce that each state has a transition with each label.
 type DFA s l = FA Identity s l
 
 deriving instance (Show (f s), Show s, Show l) => Show (FA f s l)
