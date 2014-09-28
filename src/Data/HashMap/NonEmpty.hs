@@ -68,7 +68,8 @@ fromNonEmptyList = fromNonEmptyListWith const
 
 -- |Convert a NonEmpty list into a NEHM, combining duplicate keys with the
 -- passed function.
-fromNonEmptyListWith :: (Hashable k, Eq k) => (v -> v -> v) -> NEL.NonEmpty (k, v) -> NonEmpty k v
+fromNonEmptyListWith :: (Hashable k, Eq k) => (v -> v -> v)
+                     -> NEL.NonEmpty (k, v) -> NonEmpty k v
 fromNonEmptyListWith f ((k1, v1) NEL.:| kvs) = NEHM (k1, v) hm
   where
     kvHM = HM.fromList kvs
@@ -80,7 +81,6 @@ fromNonEmptyListWith f ((k1, v1) NEL.:| kvs) = NEHM (k1, v) hm
 -- duplicate keys.
 union :: NonEmpty k v -> NonEmpty k v -> NonEmpty k v
 union = unionWith const
-
 
 -- |Unions two NEHMs together, using the provided combination function in
 -- the case of duplicate keys.

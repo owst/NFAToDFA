@@ -175,7 +175,6 @@ flattenDFAStates (FA trans inits finals) =
                            , "}"
                            ]
 
-
 -- subsetConstruction converts a NFA to a DFA, by consider sets of NFA
 -- states to be a single DFA state.
 subsetConstruction :: forall s l . (Show s, Show l) => NFA s l
